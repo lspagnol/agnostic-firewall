@@ -1,6 +1,16 @@
 #!/bin/bash
 
 ########################################################################
+# Load parameters
+
+if [ -f /etc/firewall/firewall.cf ] ; then
+	source /etc/firewall/firewall.cf
+else
+	echo "ERROR: '/etc/firewall/firewall.cf' not found !"
+	exit 1
+fi
+
+########################################################################
 # Checks
 
 # Are we root ?
@@ -18,16 +28,6 @@ fi
 # Are the ip6tables softwares present on the system ?
 if [ ! -x ${V6_IPTABLES} -o ! -x ${V6_LOADER} -o ! -x ${V6_SAVER} ]; then 
 	echo "ERROR: ip6tables binaries are not present !"
-	exit 1
-fi
-
-########################################################################
-# Load parameters
-
-if [ -f /etc/firewall/firewall.cf ] ; then
-	source /etc/firewall/firewall.cf
-else
-	echo "ERROR: '/etc/firewall/firewall.cf' not found !"
 	exit 1
 fi
 
