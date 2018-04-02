@@ -14,7 +14,7 @@ fi
 # Checks
 
 # Are we root ?
-if [ $UID -ne 0 ]; then
+if [ ${UID} -ne 0 ]; then
 	echo "ERROR: you must be root to use the firewall !"
 	exit 1
 fi
