@@ -344,7 +344,7 @@ function check_proto {
 	
 }
 
-function parse_rules {
+function parse_rule {
 	
 	local p rule
 	
@@ -356,13 +356,11 @@ function parse_rules {
 	shift
 	
 	if [ "${p}" = "ipv4" ] || [ "${p}" = "both" ] ; then
-		echo "command : ${V4_IPTABLES} ${@}"
-		echo "${V4_IPTABLES} ${@}" >> ${RULES_SCRIPT}
+		echo "${V4_IPTABLES} ${@}"
 	fi
 	
 	if [ "${p}" = "ipv6" ] || [ "${p}" = "both" ] ; then
-		echo "command : ${V6_IPTABLES} ${@}"
-		echo "${V6_IPTABLES} ${@}" >> ${RULES_SCRIPT}
+		echo "${V6_IPTABLES} ${@}"
 	fi
 	
 	echo
@@ -371,14 +369,18 @@ function parse_rules {
 
 function compile_rules {
 
-	local L
+	local L C
 
 	[ -f ${RULES_SCRIPT} ] && rm ${RULES_SCRIPT}
 
 	for rules in ${RULES} ; do
 		if [ -f ${rules} ] ; then
 			egrep -v '^#|^$' ${rules} |while read L ; do
-				parse_rules ${L}
+				echo "rule    : ${L}"
+				echo "proto   : ${p}"
+				c=$(parse_rule ${L})
+				echo "command : ${C}"
+				echo "${C}" >> ${RULES_SCRIPT}
 			done
 		fi
 	done
