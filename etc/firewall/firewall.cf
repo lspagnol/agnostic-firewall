@@ -1,0 +1,91 @@
+########################################################################
+# Parameters (also available in pre/post scripts)
+
+## IPv4 parameters ##
+
+# File name for saving
+V4_SAVE_FILE=/etc/firewall/firewallV4.sv
+V4_EMR_SAVE_FILE=/etc/firewall/firewallV4.emr
+
+# Save scripts
+V4_PRE_SAVE=/etc/firewall/presaveV4.sh
+V4_POST_SAVE=/etc/firewall/postsaveV4.sh
+
+# Start scripts
+V4_PRE_START=/etc/firewall/prestartV4.sh
+V4_POST_START=/etc/firewall/poststartV4.sh
+
+# Stop scripts
+V4_PRE_STOP=/etc/firewall/prestopV4.sh
+V4_POST_STOP=/etc/firewall/poststopV4.sh
+
+# Iptables software path
+V4_IPTABLES=/sbin/iptables
+V4_LOADER=/sbin/iptables-restore
+V4_SAVER=/sbin/iptables-save
+
+## IPv6 parameters ##
+
+# File name for saving
+V6_SAVE_FILE=/etc/firewall/firewallV6.sv
+V6_EMR_SAVE_FILE=/etc/firewall/firewallV6.emr
+
+# Save scripts
+V6_PRE_SAVE=/etc/firewall/presaveV6.sh
+V6_POST_SAVE=/etc/firewall/postsaveV6.sh
+
+# Start scripts
+V6_PRE_START=/etc/firewall/prestartV6.sh
+V6_POST_START=/etc/firewall/poststartV6.sh
+
+# Stop scripts
+V6_PRE_STOP=/etc/firewall/prestopV6.sh
+V6_POST_STOP=/etc/firewall/poststopV6.sh
+
+# Iptables software path
+V6_IPTABLES=/sbin/ip6tables
+V6_LOADER=/sbin/ip6tables-restore
+V6_SAVER=/sbin/ip6tables-save
+
+## Common parameters (IPv4 + IPv6) ##
+
+# Save scripts
+PRE_SAVE=/etc/firewall/presave.sh
+POST_SAVE=/etc/firewall/postsave.sh
+
+# Start scripts
+PRE_START=/etc/firewall/prestart.sh
+POST_START=/etc/firewall/poststart.sh
+
+# Stop scripts
+PRE_STOP=/etc/firewall/prestop.sh
+POST_STOP=/etc/firewall/poststop.sh
+
+# Return value
+rval=0
+
+########################################################################
+## "Agnostics" rules
+
+# This file use "iptables/ip6tables" syntax
+# Just replace iptables/ip6tables with "ipt"
+
+# -> the script try to know if rule is IPv4, IPv6 or both
+# -> to explicitly declare an IPv4 only rule, use "ipt4" instead
+# -> to explicitly declare an IPv6 only rule, use "ipt6" instead
+
+# "Firewall_begin.rules" -> apply these rules at first
+# "Firewall_end.rules" -> apply these rules at end
+# "Firewall.rules" -> put your own specific services rules here
+
+# Theses files will be parsed, in ordrer, to generate shell script by
+# the "compile" option. The "apply" option will apply the compiled into
+# the shell scrit. Then use "save" option to save the rules that will be
+# apply at boot time.
+
+RULES="
+/etc/firewall/COMMON.rules
+/etc/firewall/LOCAL.rules
+"
+
+RULES_SCRIPT="/etc/firewall/compiled_rules.sh"

@@ -1,0 +1,95 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:             iptables
+# Required-Start:       
+# Required-Stop:        
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    start and stop the host personnal firewall
+### END INIT INFO
+
+# /etc/init.d/firewall: start and stop the host personnal firewall
+# This script change the packet filter state according to a file
+# Requires linux kernel 2.4 or greater, iptables, iptables-restore and
+# iptables-save functions.
+
+########################################################################
+# Load functions
+
+if [ -f /usr/local/firewall/firewall.lib ] ; then
+	. /usr/local/firewall/firewall.lib
+else
+	echo "ERROR: '/usr/local/firewall/firewall.lib' not found"
+	exit 1
+fi
+
+########################################################################
+# Main
+
+case "${1}" in
+
+	# Compile rules
+	compile)
+		compile_rules
+	;;
+
+	# Apply rules
+	apply)
+		apply_rules
+	;;
+
+	# IPv4 and IPv6
+	start)
+		start_firewall
+	;;
+	stop)
+		stop_firewall
+	;;
+	restart)
+		stop_firewall
+		start_firewall
+	;;
+	save)
+		save_firewall
+	;;
+
+	# IPv4 only
+	start-v4)
+		start_V4_firewall
+	;;
+	stop-v4)
+		stop_V4_firewall
+	;;
+	restart-v4)
+		stop_V4_firewall
+		start_V4_firewall
+	;;
+	save-v4)
+		save_V4_firewall
+	;;
+
+	# IPv6 only
+	start-v6)
+		start_V6_firewall
+	;;
+	stop-v6)
+		stop_V6_firewall
+	;;
+	restart-v6)
+		stop_V6_firewall
+		start_V6_firewall
+	;;
+	save-v6)
+		save_V6_firewall
+	;;
+
+	# Help
+	*)
+		echo "Usage : $0 {start|stop|restart|save|start-v4|stop-v4|restart-v4|save-v4|start-v6|stop-v6|restart-v6|save-v6}"
+		exit 1
+	;;
+
+esac
+
+exit ${rval}
