@@ -378,7 +378,7 @@ function compile_rules {
 			egrep -v '^#|^$' ${rules} |while read L ; do
 				echo "rule    : ${L}"
 				echo "proto   : ${p}"
-				c=$(parse_rule ${L})
+				C=$(parse_rule ${L})
 				echo "command : ${C}"
 				echo "${C}" >> ${RULES_SCRIPT}
 			done
