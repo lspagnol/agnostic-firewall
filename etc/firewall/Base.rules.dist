@@ -1,0 +1,76 @@
+########################################################################
+## Base rules
+########################################################################
+
+# Both: INPUT
+ipt -N Base-IN
+ipt -A INPUT -j Base-IN
+
+# Both: OUTPUT
+ipt -N Base-OUT
+ipt -A OUTPUT -j Base-OUT
+
+
+########################################################################
+## Base chains
+########################################################################
+
+# Both: allow loopback and established
+ipt -A Base-IN -i lo -j ACCEPT
+ipt -A Base-IN -m state --state RELATED,ESTABLISHED -j ACCEPT
+ipt -A Base-OUT -o lo -j ACCEPT
+ipt -A Base-OUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+# Both: deny invalid frames
+ipt -N Badformat
+ipt -A Base-IN -j Badformat
+ipt -A Badformat -s 127.0.0.1 ! -i lo -j DROP
+ipt -A Badformat -s ::1/128 ! -i lo -j DROP
+
+# IPv6: allow routing
+ipt6 -N Routing
+ipt6 -A Base-IN -s fe80::/10 -j Routing
+ipt6 -A Base-IN -d fe80::/10 -j Routing
+ipt6 -A Base-OUT -s fe80::/10 -j Routing
+ipt6 -A Base-OUT -d fe80::/10 -j Routing
+ipt6 -A Routing -p ipv6-icmp -m icmp6 --icmpv6-type 133 -j ACCEPT
+ipt6 -A Routing -p ipv6-icmp -m icmp6 --icmpv6-type 134 -j ACCEPT  
+
+# IPv6: allow neighbor
+ipt6 -N Neighbor
+ipt6 -A Base-IN -j Neighbor
+ipt6 -A Base-OUT -j Neighbor
+ipt6 -A Neighbor -p ipv6-icmp -m icmp6 --icmpv6-type 135 -j ACCEPT
+ipt6 -A Neighbor -p ipv6-icmp -m icmp6 --icmpv6-type 136 -j ACCEPT
+
+# Both: allowed ICMP
+ipt -N ICMP
+ipt -A Base-IN -j ICMP
+ipt -A Base-OUT -j ICMP
+ipt4 -A ICMP -p icmp -m icmp --icmp-type 0 -j ACCEPT
+ipt4 -A ICMP -p icmp -m icmp --icmp-type 3 -j ACCEPT
+ipt4 -A ICMP -p icmp -m icmp --icmp-type 8 -j ACCEPT
+ipt4 -A ICMP -p icmp -m icmp --icmp-type 11 -j ACCEPT
+ipt6 -A ICMP -p ipv6-icmp -m icmp6 --icmpv6-type 1 -j ACCEPT
+ipt6 -A ICMP -p ipv6-icmp -m icmp6 --icmpv6-type 2 -j ACCEPT
+ipt6 -A ICMP -p ipv6-icmp -m icmp6 --icmpv6-type 3 -j ACCEPT
+ipt6 -A ICMP -p ipv6-icmp -m icmp6 --icmpv6-type 4 -j ACCEPT
+ipt6 -A ICMP -p ipv6-icmp -m icmp6 --icmpv6-type 128 -j ACCEPT
+
+# Both: allow DNS
+ipt -A Base-OUT -p udp -m udp --dport 53 -j ACCEPT
+ipt -A Base-OUT -p tcp -m tcp --dport 53 -j ACCEPT
+ipt -A Base-OUT -p udp -m udp --dport 53 -j ACCEPT
+ipt -A Base-OUT -p tcp -m tcp --dport 53 -j ACCEPT
+
+# Both: allow NTP
+ipt -A Base-OUT -p udp -m udp --dport 123 -j ACCEPT
+
+# Both: for "volatile" rules (ipt-volatile)
+ipt -N Volatile
+ipt -A INPUT -j Volatile
+ipt -A OUTPUT -j Volatile
+
+# Both: allow updates
+ipt -A Base-OUT -d ubuntu.univ-reims.fr -p tcp -m tcp --dport 80 -j ACCEPT
+ipt -A Base-OUT -d security.ubuntu.com -p tcp -m tcp --dport 80 -j ACCEPT

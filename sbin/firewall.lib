@@ -47,7 +47,7 @@ function start_V4_firewall {
 
 		[ -f ${V4_POST_START} ] && source ${V4_POST_START}
 
-		echo "done."
+		echo "done"
 
 	else
 
@@ -66,7 +66,7 @@ function stop_V4_firewall {
 	[ -f ${V4_PRE_STOP} ] && source ${V4_PRE_STOP}
 
 	$V4_SAVER > ${V4_EMR_SAVE_FILE}
-	echo "IPv4 firewall saved to ${V4_EMR_SAVE_FILE}."
+	echo "IPv4 firewall saved to ${V4_EMR_SAVE_FILE}"
 
 	echo -n "Stopping local IPv4 firewall : "
 
@@ -85,7 +85,7 @@ function stop_V4_firewall {
 
 	[ -f ${V4_POST_STOP} ] && source ${V4_POST_STOP}
 
-	echo "done."
+	echo "done"
 
 }
 
@@ -98,7 +98,7 @@ function save_V4_firewall {
 
 	$V4_SAVER > ${V4_SAVE_FILE}
 	chmod o-rwx ${V4_SAVE_FILE}
-	echo "IPv4 firewall saved to ${V4_SAVE_FILE}."
+	echo "IPv4 firewall saved to ${V4_SAVE_FILE}"
 
 	[ -f ${V4_POST_SAVE} ] && source ${V4_POST_SAVE}
 }
@@ -116,7 +116,7 @@ function start_V6_firewall {
 
 		[ -f ${V6_POST_START} ] && source ${V6_POST_START}
 
-		echo "done."
+		echo "done"
 
 	else
 
@@ -134,7 +134,7 @@ function stop_V6_firewall {
 	[ -f ${V6_PRE_STOP} ] && source ${V6_PRE_STOP}
 
 	$V6_SAVER > ${V6_EMR_SAVE_FILE}
-	echo "IPv6 firewall saved to ${V6_EMR_SAVE_FILE}."
+	echo "IPv6 firewall saved to ${V6_EMR_SAVE_FILE}"
 
 	echo -n "Stopping local IPv6 firewall : "
 
@@ -153,7 +153,7 @@ function stop_V6_firewall {
 
 	[ -f ${V6_POST_STOP} ] && source ${V6_POST_STOP}
 
-	echo "done."
+	echo "done"
 } 
 
 # Save the running firewave.
@@ -165,13 +165,13 @@ function save_V6_firewall {
 
 	$V6_SAVER > ${V6_SAVE_FILE}
 	chmod o-rwx ${V6_SAVE_FILE}
-	echo "IPv6 firewall saved to ${V6_SAVE_FILE}."
+	echo "IPv6 firewall saved to ${V6_SAVE_FILE}"
 
 	[ -f ${V6_POST_SAVE} ] && source ${V6_POST_SAVE}
 
 }
 
-# Start V4 and V6 firewall
+# Start _V4 and _V6 firewall
 function start_firewall {
 
 	[ -f ${PRE_START} ] && source ${PRE_START}
@@ -183,7 +183,7 @@ function start_firewall {
 
 }
 
-# Stop V4 and V6 firewall
+# Stop _V4 and _V6 firewall
 function stop_firewall {
 
 	[ -f ${PRE_STOP} ] && source ${PRE_STOP}
@@ -195,7 +195,7 @@ function stop_firewall {
 
 }
 
-# Save V4 and V6 firewall
+# Save _V4 and _V6 firewall
 function save_firewall {
 
 	[ -f ${PRE_SAVE} ] && source ${PRE_SAVE}
@@ -349,10 +349,7 @@ function parse_rule {
 	local p rule
 	
 	p=$(check_proto "${@}")
-	
-	echo "rule    : ${@}"
-	echo "proto   : ${p}"
-	
+
 	shift
 	
 	if [ "${p}" = "ipv4" ] || [ "${p}" = "both" ] ; then
@@ -371,16 +368,13 @@ function compile_rules {
 
 	local L C
 
-	[ -f ${RULES_SCRIPT} ] && rm ${RULES_SCRIPT}
-
 	for rules in ${RULES} ; do
 		if [ -f ${rules} ] ; then
 			egrep -v '^#|^$' ${rules} |while read L ; do
-				echo "rule    : ${L}"
-				echo "proto   : ${p}"
+				echo "# ${L}"
 				C=$(parse_rule ${L})
-				echo "command : ${C}"
-				echo "${C}" >> ${RULES_SCRIPT}
+				echo "${C}"
+				echo
 			done
 		fi
 	done
@@ -394,16 +388,6 @@ function apply_rules {
 		exit 1
 	fi
 
-	cat ${RULES_SCRIPT} |while read L ; do
-#		echo -n "${L} ==> "
-		echo "${L}"
-		${L} #2>/dev/null >/dev/null
-		echo
-#		if [ $? -eq 0 ] ; then
-#			echo ok
-#		else
-#			echo ERROR
-#		fi
-	done
+	source ${RULES_SCRIPT}
 
 }

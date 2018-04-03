@@ -4,20 +4,20 @@
 ## IPv4 parameters ##
 
 # File name for saving
-V4_SAVE_FILE=/etc/firewall/firewallV4.sv
-V4_EMR_SAVE_FILE=/etc/firewall/firewallV4.emr
+V4_SAVE_FILE=/etc/firewall/firewall_V4.sv
+V4_EMR_SAVE_FILE=/etc/firewall/firewall_V4.emr
 
 # Save scripts
-V4_PRE_SAVE=/etc/firewall/presaveV4.sh
-V4_POST_SAVE=/etc/firewall/postsaveV4.sh
+V4_PRE_SAVE=/etc/firewall/presave_V4.sh
+V4_POST_SAVE=/etc/firewall/postsave_V4.sh
 
 # Start scripts
-V4_PRE_START=/etc/firewall/prestartV4.sh
-V4_POST_START=/etc/firewall/poststartV4.sh
+V4_PRE_START=/etc/firewall/prestart_V4.sh
+V4_POST_START=/etc/firewall/poststart_V4.sh
 
 # Stop scripts
-V4_PRE_STOP=/etc/firewall/prestopV4.sh
-V4_POST_STOP=/etc/firewall/poststopV4.sh
+V4_PRE_STOP=/etc/firewall/prestop_V4.sh
+V4_POST_STOP=/etc/firewall/poststop_V4.sh
 
 # Iptables software path
 V4_IPTABLES=/sbin/iptables
@@ -27,20 +27,20 @@ V4_SAVER=/sbin/iptables-save
 ## IPv6 parameters ##
 
 # File name for saving
-V6_SAVE_FILE=/etc/firewall/firewallV6.sv
-V6_EMR_SAVE_FILE=/etc/firewall/firewallV6.emr
+V6_SAVE_FILE=/etc/firewall/firewall_V6.sv
+V6_EMR_SAVE_FILE=/etc/firewall/firewall_V6.emr
 
 # Save scripts
-V6_PRE_SAVE=/etc/firewall/presaveV6.sh
-V6_POST_SAVE=/etc/firewall/postsaveV6.sh
+V6_PRE_SAVE=/etc/firewall/presave_V6.sh
+V6_POST_SAVE=/etc/firewall/postsave_V6.sh
 
 # Start scripts
-V6_PRE_START=/etc/firewall/prestartV6.sh
-V6_POST_START=/etc/firewall/poststartV6.sh
+V6_PRE_START=/etc/firewall/prestart_V6.sh
+V6_POST_START=/etc/firewall/poststart_V6.sh
 
 # Stop scripts
-V6_PRE_STOP=/etc/firewall/prestopV6.sh
-V6_POST_STOP=/etc/firewall/poststopV6.sh
+V6_PRE_STOP=/etc/firewall/prestop_V6.sh
+V6_POST_STOP=/etc/firewall/poststop_V6.sh
 
 # Iptables software path
 V6_IPTABLES=/sbin/ip6tables
@@ -84,8 +84,9 @@ rval=0
 # apply at boot time.
 
 RULES="
-/etc/firewall/COMMON.rules
-/etc/firewall/LOCAL.rules
+/etc/firewall/Base.rules
+/etc/firewall/Admin.rules
+/etc/firewall/Services.rules
 "
 
 RULES_SCRIPT="/etc/firewall/compiled_rules.sh"

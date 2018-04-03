@@ -1,0 +1,44 @@
+########################################################################
+## Services rules
+########################################################################
+
+# Both: INPUT
+ipt -N Services-IN
+ipt -A INPUT -j Services-IN
+
+# Both: OUTPUT
+ipt -N Services-OUT
+ipt -A OUTPUT -j Services-OUT
+
+
+########################################################################
+## Services Chains
+########################################################################
+
+# Both: allow access to your services here
+#ipt -A Services-IN -p tcp -m tcp --dport 80 -j ACCEPT
+#ipt -A Services-IN -p tcp -m tcp --dport 443 -j ACCEPT
+
+# Both: allow what is needed by your services here
+#ipt -A Services-OUT -p tcp -m tcp --dport 636 -d ldap.mydomain.tld -j ACCEPT
+#ipt -A Services-OUT -p tcp -m tcp --dport 3306 -d mariadb.mydomain.tld -j ACCEPT
+
+
+########################################################################
+## END of rules: don't forget your default policy !!
+########################################################################
+
+# Exemple 1:
+#ipt -A INPUT -P DROP
+#ipt -A OUTPUT -P DROP
+
+# Example 2:
+#ipt -A INPUT -j DROP
+#ipt -A OUTPUT -j DROP
+
+# Example 3:
+#ipt -N END
+#ipt -A END -m limit --limit 10/min -j LOG
+#ipt -A END -j DROP
+#ipt -A INPUT -j END
+#ipt -A OUTPUT -j END
