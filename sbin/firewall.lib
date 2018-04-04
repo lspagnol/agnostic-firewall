@@ -65,9 +65,6 @@ function stop_V4_firewall {
 
 	[ -f ${V4_PRE_STOP} ] && source ${V4_PRE_STOP}
 
-	#$V4_SAVER > ${V4_EMR_SAVE_FILE}
-	#echo "IPv4 firewall saved to ${V4_EMR_SAVE_FILE}"
-
 	echo -n "Stopping local IPv4 firewall : "
 
 	# We set the built-in chain policy to ACCEPT
@@ -107,8 +104,6 @@ function save_V4_firewall {
 
 	[ -f ${V4_PRE_SAVE} ] && source ${V4_PRE_SAVE}
 
-	[ -f ${V4_SAVE_FILE} ] && mv ${V4_SAVE_FILE} ${V4_SAVE_FILE}~
-
 	$V4_SAVER > ${V4_SAVE_FILE}
 	chmod o-rwx ${V4_SAVE_FILE}
 	echo "IPv4 firewall saved to ${V4_SAVE_FILE}"
@@ -145,9 +140,6 @@ function stop_V6_firewall {
 	local ch
 
 	[ -f ${V6_PRE_STOP} ] && source ${V6_PRE_STOP}
-
-	#$V6_SAVER > ${V6_EMR_SAVE_FILE}
-	#echo "IPv6 firewall saved to ${V6_EMR_SAVE_FILE}"
 
 	echo -n "Stopping local IPv6 firewall : "
 
@@ -186,8 +178,6 @@ function save_V6_firewall {
 	fi
 
 	[ -f ${V6_PRE_SAVE} ] && source ${V6_PRE_SAVE}
-
-	[ -f ${V6_SAVE_FILE} ] && mv ${V6_SAVE_FILE} ${V6_SAVE_FILE}~
 
 	$V6_SAVER > ${V6_SAVE_FILE}
 	chmod o-rwx ${V6_SAVE_FILE}

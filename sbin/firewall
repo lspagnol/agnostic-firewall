@@ -82,10 +82,12 @@ case "${1}" in
 	# Help
 	*)
 cat<<EOT
-Usage : $0 compile|try|apply
-           start|stop|restart|save
-           start-v4|stop-v4|restart-v4|save-v4
-           start-v6|stop-v6|restart-v6|save-v6
+Usage   : $0 <Command>
+
+Commands: compile|try|apply
+          start|stop|restart|save
+          start-v4|stop-v4|restart-v4|save-v4
+          start-v6|stop-v6|restart-v6|save-v6
 
 EOT
 		exit 1
