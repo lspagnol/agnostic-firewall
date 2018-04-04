@@ -1,7 +1,8 @@
 #!/bin/bash
 
-apt-get -y install at
+apt-get -y install at iptables
 
+# Scripts
 [ -d /usr/local/firewall/ ] || mkdir /usr/local/firewall/
 cp sbin/* /usr/local/firewall/
 chmod 774 /usr/local/firewall/firewall
@@ -9,6 +10,7 @@ ln -fs /usr/local/firewall/firewall /usr/local/sbin/firewall
 chmod 644 /usr/local/firewall/firewall.lib
 chown -R root:root /usr/local/firewall/
 
+# Configuration
 [ -d /etc/firewall ] || mkdir /etc/firewall
 if [ -d etc-urca ] ; then
 	cp etc-urca/firewall/*.dist /etc/firewall/
