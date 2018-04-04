@@ -66,7 +66,7 @@ ipt -A Base-OUT -p tcp -m tcp --dport 53 -j ACCEPT
 # Both: allow NTP
 ipt -A Base-OUT -p udp -m udp --dport 123 -j ACCEPT
 
-# Both: for "volatile" rules (ipt-volatile)
+# Both: for "volatile" rules
 ipt -N Volatile
 ipt -A INPUT -j Volatile
 ipt -A OUTPUT -j Volatile
