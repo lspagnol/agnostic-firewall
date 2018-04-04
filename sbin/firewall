@@ -23,7 +23,6 @@ case "${1}" in
 
 	# Apply rules
 	apply)
-		stop_firewall
 		apply_rules
 	;;
 

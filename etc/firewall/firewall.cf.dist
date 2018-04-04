@@ -5,7 +5,7 @@
 
 # File name for saving
 V4_SAVE_FILE=/etc/firewall/firewall_V4.sv
-V4_EMR_SAVE_FILE=/etc/firewall/firewall_V4.emr
+#V4_EMR_SAVE_FILE=/etc/firewall/firewall_V4.emr
 
 # Save scripts
 V4_PRE_SAVE=/etc/firewall/presave_V4.sh
@@ -28,7 +28,7 @@ V4_SAVER=/sbin/iptables-save
 
 # File name for saving
 V6_SAVE_FILE=/etc/firewall/firewall_V6.sv
-V6_EMR_SAVE_FILE=/etc/firewall/firewall_V6.emr
+#V6_EMR_SAVE_FILE=/etc/firewall/firewall_V6.emr
 
 # Save scripts
 V6_PRE_SAVE=/etc/firewall/presave_V6.sh
@@ -64,6 +64,9 @@ POST_STOP=/etc/firewall/poststop.sh
 # Return value
 rval=0
 
+# Log 'apply rules' to this file
+APPLY_LOG=/tmp/apply_rules.log
+
 ########################################################################
 ## "Agnostics" rules
 
@@ -89,4 +92,4 @@ RULES="
 /etc/firewall/Services.rules
 "
 
-RULES_SCRIPT="/etc/firewall/compiled_rules.sh"
+RULES_SCRIPT="/tmp/compiled_rules.sh"

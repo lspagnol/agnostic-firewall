@@ -6,7 +6,7 @@
 if [ -f /etc/firewall/firewall.cf ] ; then
 	source /etc/firewall/firewall.cf
 else
-	echo "ERROR: '/etc/firewall/firewall.cf' not found !"
+	echo "ABORTED: '/etc/firewall/firewall.cf' not found !"
 	exit 1
 fi
 
@@ -15,19 +15,19 @@ fi
 
 # Are we root ?
 if [ ${UID} -ne 0 ]; then
-	echo "ERROR: you must be root to use the firewall !"
+	echo "ABORTED: you must be root to use the firewall !"
 	exit 1
 fi
 
 # Are the iptables softwares present on the system ?
 if [ ! -x ${V4_IPTABLES} -o ! -x ${V4_LOADER} -o ! -x ${V4_SAVER} ]; then 
-	echo "ERROR: iptables binaries are not present !"
+	echo "ABORTED: iptables binaries are not present !"
 	exit 1
 fi
 
 # Are the ip6tables softwares present on the system ?
 if [ ! -x ${V6_IPTABLES} -o ! -x ${V6_LOADER} -o ! -x ${V6_SAVER} ]; then 
-	echo "ERROR: ip6tables binaries are not present !"
+	echo "ABORTED: ip6tables binaries are not present !"
 	exit 1
 fi
 
@@ -65,8 +65,8 @@ function stop_V4_firewall {
 
 	[ -f ${V4_PRE_STOP} ] && source ${V4_PRE_STOP}
 
-	$V4_SAVER > ${V4_EMR_SAVE_FILE}
-	echo "IPv4 firewall saved to ${V4_EMR_SAVE_FILE}"
+	#$V4_SAVER > ${V4_EMR_SAVE_FILE}
+	#echo "IPv4 firewall saved to ${V4_EMR_SAVE_FILE}"
 
 	echo -n "Stopping local IPv4 firewall : "
 
@@ -91,6 +91,19 @@ function stop_V4_firewall {
 
 # Save the running firewall
 function save_V4_firewall {
+
+	if [ ! -f ${APPLY_LOG} ] ; then
+		echo "ABORTED: please apply your rules first !"
+		exit 1
+	fi
+
+	grep -q "^# ERROR: ${V4_IPTABLES} " ${APPLY_LOG}
+	if [ $? -eq 0 ] ; then
+		echo "ABORTED: please check your rules !"
+		grep -B2 "^# ERROR: ${V4_IPTABLES} " ${APPLY_LOG} |grep -v "^$"
+		echo
+		exit 1
+	fi
 
 	[ -f ${V4_PRE_SAVE} ] && source ${V4_PRE_SAVE}
 
@@ -133,8 +146,8 @@ function stop_V6_firewall {
 
 	[ -f ${V6_PRE_STOP} ] && source ${V6_PRE_STOP}
 
-	$V6_SAVER > ${V6_EMR_SAVE_FILE}
-	echo "IPv6 firewall saved to ${V6_EMR_SAVE_FILE}"
+	#$V6_SAVER > ${V6_EMR_SAVE_FILE}
+	#echo "IPv6 firewall saved to ${V6_EMR_SAVE_FILE}"
 
 	echo -n "Stopping local IPv6 firewall : "
 
@@ -158,6 +171,19 @@ function stop_V6_firewall {
 
 # Save the running firewave.
 function save_V6_firewall {
+
+	if [ ! -f ${APPLY_LOG} ] ; then
+		echo "ABORTED: please apply your rules first !"
+		exit 1
+	fi
+
+	grep -q "^# ERROR: ${V6_IPTABLES} " ${APPLY_LOG}
+	if [ $? -eq 0 ] ; then
+		echo "ABORTED: please check your rules"
+		grep -B2 "^# ERROR: ${V6_IPTABLES} " ${APPLY_LOG} |grep -v "^$"
+		echo
+		exit 1
+	fi
 
 	[ -f ${V6_PRE_SAVE} ] && source ${V6_PRE_SAVE}
 
@@ -197,6 +223,19 @@ function stop_firewall {
 
 # Save _V4 and _V6 firewall
 function save_firewall {
+
+	if [ ! -f ${APPLY_LOG} ] ; then
+		echo "ABORTED: please apply your rules first !"
+		exit 1
+	fi
+
+	grep -q "^# ERROR: " ${APPLY_LOG}
+	if [ $? -eq 0 ] ; then
+		echo "ABORTED: please check your rules !"
+		grep -B2 "^# ERROR: " ${APPLY_LOG} |grep -v "^$"
+		echo
+		exit 1
+	fi
 
 	[ -f ${PRE_SAVE} ] && source ${PRE_SAVE}
 
@@ -383,11 +422,33 @@ function compile_rules {
 
 function apply_rules {
 
+	local R r e
+	errors=0
+
 	if [ ! -f ${RULES_SCRIPT} ] ; then
-		echo "ERROR: compile rules first !"
+		echo "ABORTED: please compile your rules first !"
 		exit 1
 	fi
 
-	source ${RULES_SCRIPT}
+	stop_firewall
+
+	cat ${RULES_SCRIPT} |while read R ; do
+		e=0
+		r=(${R})
+		case "${r}" in
+			${V4_IPTABLES}|${V6_IPTABLES})
+				${R} 2>/dev/null
+				[ $? -ne 0 ] && e=1
+			;;
+		esac
+		if [ ${e} -eq 0 ] ; then
+			echo "${R}"
+		else
+			echo "# ERROR: ${R}"
+		fi
+	done |tee ${APPLY_LOG}
+	echo -n "# ERRORS: " |tee -a ${APPLY_LOG}
+	grep -c "^# ERROR: " ${APPLY_LOG} |tee -a ${APPLY_LOG}
+	echo |tee -a ${APPLY_LOG}
 
 }
