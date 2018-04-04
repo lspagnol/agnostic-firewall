@@ -19,6 +19,13 @@ sh install.sh
 * Grant **only necessary access** from the world to your server,
 * give it **only necessary access** to the world (such as LDAP, SQL, ...),
 
+# Syntax of rules:
+* Just replace `iptables/ip6tables` with `ipt`.
+* The script will try to know if rule apply to IPv4, IPv6 or both:
+  * check type of IP addresses,
+  * resolve V4/V6 addresses for host/fqdn based rule.
+* Declaration can be explicit: use `ipt4` or `ipt6` instead of `ipt`.
+
 # Usage:
 * Compile your rules: `firewall compile`
 * Try your rules (with automatic flush of rules for nuts like me ...): `firewall try`
@@ -28,9 +35,3 @@ sh install.sh
 * Start firewall: `firewall start` or `service firewall start`
 * Stop firewall (flush rules and set policy to *accept*): `firewall stop` or `service firewall stop`
 
-# Syntax of rules:
-* Just replace `iptables/ip6tables` with `ipt`.
-* The script will try to know if rule apply to IPv4, IPv6 or both:
-  * check type of IP addresses,
-  * resolve V4/V6 addresses for host/fqdn based rule.
-* Declaration can be explicit: use `ipt4` or `ipt6` instead of `ipt`.
