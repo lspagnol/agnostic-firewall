@@ -25,6 +25,8 @@ sh install.sh
 * It's okay ?
 * Then apply rules: `firewall apply`
 * Save rules (they will be applied at boot time): `firewall save`
+* Start firewall: `firewall start` or `service firewall start`
+* Stop firewall (flush rules and set policy to *accept*): `firewall stop` or `service firewall stop`
 
 # Syntax of rules:
 * Just replace `iptables/ip6tables` with `ipt`.
