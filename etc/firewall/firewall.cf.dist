@@ -5,7 +5,6 @@
 
 # File name for saving
 V4_SAVE_FILE=/etc/firewall/firewall_V4.sv
-#V4_EMR_SAVE_FILE=/etc/firewall/firewall_V4.emr
 
 # Save scripts
 V4_PRE_SAVE=/etc/firewall/presave_V4.sh
@@ -28,7 +27,6 @@ V4_SAVER=/sbin/iptables-save
 
 # File name for saving
 V6_SAVE_FILE=/etc/firewall/firewall_V6.sv
-#V6_EMR_SAVE_FILE=/etc/firewall/firewall_V6.emr
 
 # Save scripts
 V6_PRE_SAVE=/etc/firewall/presave_V6.sh
