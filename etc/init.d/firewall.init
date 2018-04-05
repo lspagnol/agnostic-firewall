@@ -68,7 +68,7 @@ case "${1}" in
 	# Help
 	*)
 cat<<EOT
-Usage : $0 start|stop|restart|start-v4|stop-v4|restart-v4|start-v6|stop-v6|restart-v6
+Usage : $0 start|stop|restart
 
 EOT
 		exit 1
