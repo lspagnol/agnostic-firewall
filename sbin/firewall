@@ -17,8 +17,7 @@ case "${1}" in
 
 	# Compile rules
 	compile)
-		[ -f ${RULES_SCRIPT} ] && rm ${RULES_SCRIPT}
-		compile_rules |tee ${RULES_SCRIPT}
+		compile_rules
 	;;
 
 	# Apply rules
@@ -84,10 +83,7 @@ case "${1}" in
 cat<<EOT
 Usage   : $0 <Command>
 
-Commands: compile|try|apply
-          start|stop|restart|save
-          start-v4|stop-v4|restart-v4|save-v4
-          start-v6|stop-v6|restart-v6|save-v6
+Commands: compile|try|apply|save|start|stop|restart
 
 EOT
 		exit 1
