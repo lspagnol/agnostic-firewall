@@ -34,4 +34,3 @@ sh install.sh
 * Save rules (they will be applied at boot time): `firewall save`
 * Start firewall: `firewall start` or `service firewall start`
 * Stop firewall (flush rules and set policy to *accept*): `firewall stop` or `service firewall stop`
-

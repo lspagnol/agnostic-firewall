@@ -1,7 +1,5 @@
 #!/bin/bash
 
-rval=0
-
 ########################################################################
 # Load parameters
 
@@ -40,6 +38,11 @@ fi
 function start_V4_firewall {
 
 	echo -n "Starting local IPv4 firewall : "
+
+	if [ "${V4_DISABLE}" = "1" ] ; then
+		echo "disabled"
+		return
+	fi
 
 	if [ -f ${V4_SAVE_FILE} ]; then
 
@@ -120,6 +123,11 @@ function save_V4_firewall {
 function start_V6_firewall {
 
 	echo -n "Starting local IPv6 firewall : "
+
+	if [ "${V6_DISABLE}" = "1" ] ; then
+		echo "disabled"
+		return
+	fi
 
 	if [ -f ${V6_SAVE_FILE} ]; then
 
@@ -409,11 +417,19 @@ function parse_rule {
 	shift
 	
 	if [ "${p}" = "ipv4" ] || [ "${p}" = "both" ] ; then
-		echo "${V4_IPTABLES} ${@}"
+		if [ "${V4_DISABLE}" = "1" ] ; then
+			echo "# (IPv4 disabled) ${V4_IPTABLES} ${@}"
+		else
+			echo "${V4_IPTABLES} ${@}"
+		fi
 	fi
 	
 	if [ "${p}" = "ipv6" ] || [ "${p}" = "both" ] ; then
-		echo "${V6_IPTABLES} ${@}"
+		if [ "${V6_DISABLE}" = "1" ] ; then
+			echo "# (IPv6 disabled) ${V6_IPTABLES} ${@}"
+		else
+			echo "${V6_IPTABLES} ${@}"
+		fi
 	fi
 
 	if [ "${p}" = "noip" ] ; then
