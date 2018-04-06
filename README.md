@@ -11,10 +11,16 @@ cd agnostic-firewall
 sh install.sh
 ````
 # Configuration:
+
+## */etc/firewall/firewall.cf*
+* Main configuration file.
+
 ## */etc/firewall/Base.rules*
 * Basic common rules (loopback, established, routing and IPv6 neighbor, various ICMP, ...).
+
 ## */etc/firewall/Admin.rules*
 * Allow connexions from your adminstrative hosts or networks.
+
 ## */etc/firewall/Services.rules*
 * Grant **only necessary access** from the world to your server,
 * give it **only necessary access** to the world (such as LDAP, SQL, ...),
@@ -27,11 +33,17 @@ sh install.sh
 * Declaration can be explicit: use `ipt4` or `ipt6` instead of `ipt`.
 
 # Usage:
+
+## Rules management:
+* Edit your services ruleset file: `/etc/firewall/Services.rules`
 * Compile your rules: `firewall compile`
 * Try your rules (with automatic flush of rules for nuts like me ...): `firewall try`
-* It's okay ?
-* Then apply rules: `firewall apply`
-* Save rules (they will be applied at boot time): `firewall save`
+* It's okay ? ... then apply rules: `firewall apply`
+* Save the Netfilter rules (they will be applied at boot time): `firewall save`
+  * The *compiled* IPv4 rules are stored in `/etc/firewall/firewall_V4.sv`
+  * The *compiled* IPv6 rules are stored in `/etc/firewall/firewall_V6.sv`
+* You have done some minor changes on your rules, or you whish to update them (FQDN resolution): just do `firewall update`
+
+## Firewall management:
 * Start firewall: `firewall start` or `service firewall start`
 * Stop firewall (flush rules and set policy to *accept*): `firewall stop` or `service firewall stop`
-* You have done some minor changes on your rules, or you whish to update them (FQDN resolution): just do `firewall update`
