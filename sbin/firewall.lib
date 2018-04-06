@@ -34,6 +34,21 @@ fi
 ########################################################################
 # Functions (firewall management)
 
+# What is the state of V4 firewall ?
+# return code 0 => running
+# return code 1 => stopped
+function state_V4_firewall {
+
+	local r
+	r=$(iptables -L |egrep -v '^($|Chain|target)' |wc -l)
+	if [ ${r} -eq 0 ] ; then
+		return 1
+	else
+		return 0
+	fi
+
+}
+
 # Append the data from the save file to the running firewall
 function start_V4_firewall {
 
@@ -41,6 +56,12 @@ function start_V4_firewall {
 
 	if [ "${V4_DISABLE}" = "1" ] ; then
 		echo "disabled"
+		return
+	fi
+
+	state_V4_firewall
+	if [ $? -eq 0 ] ; then
+		echo "already started"
 		return
 	fi
 
@@ -129,6 +150,12 @@ function start_V6_firewall {
 		return
 	fi
 
+	state_V6_firewall
+	if [ $? -eq 0 ] ; then
+		echo "already started"
+		return
+	fi
+
 	if [ -f ${V6_SAVE_FILE} ]; then
 
 		[ -f ${V6_PRE_START} ] && source ${V6_PRE_START}
@@ -203,8 +230,41 @@ function save_V6_firewall {
 
 }
 
+# What is the state of V6 firewall ?
+# return code 0 => running
+# return code 1 => stopped
+function state_V6_firewall {
+
+	local r
+	r=$(ip6tables -L |egrep -v '^($|Chain|target)' |wc -l)
+	if [ ${r} -eq 0 ] ; then
+		return 1
+	else
+		return 0
+	fi
+
+}
+
 # Start V4 and V6 firewall
 function start_firewall {
+
+	# Ensure the firewall is not already running
+	if [ "${V4_DISABLE}" != "1" ] ; then
+		state_V4_firewall
+		if [ $? -eq 0 ] ; then
+			echo "IPv4 firewall is already running"
+			rval=1
+		fi
+	fi
+
+	if [ "${V6_DISABLE}" != "1" ] ; then
+		state_V6_firewall
+		if [ $? -eq 0 ] ; then
+			echo "IPv6 firewall is already running"
+			rval=1
+		fi
+	fi
+	[ ${rval} -eq 1 ] && return
 
 	[ -f ${PRE_START} ] && source ${PRE_START}
 
