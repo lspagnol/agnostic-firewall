@@ -33,6 +33,11 @@ case "${1}" in
 		apply_rules
 	;;
 
+	# Update rules
+	update)
+		update_firewall
+	;;
+
 	# IPv4 and IPv6
 	start)
 		start_firewall
@@ -83,7 +88,7 @@ case "${1}" in
 cat<<EOT
 Usage   : $0 <Command>
 
-Commands: compile|try|apply|save|start|stop|restart
+Commands: compile|try|apply|save|update|start|stop|restart
 
 EOT
 		exit 1

@@ -32,7 +32,7 @@ if [ ! -x ${V6_IPTABLES} -o ! -x ${V6_LOADER} -o ! -x ${V6_SAVER} ]; then
 fi
 
 ########################################################################
-# Functions
+# Functions (firewall management)
 
 # Append the data from the save file to the running firewall
 function start_V4_firewall {
@@ -203,7 +203,7 @@ function save_V6_firewall {
 
 }
 
-# Start _V4 and _V6 firewall
+# Start V4 and V6 firewall
 function start_firewall {
 
 	[ -f ${PRE_START} ] && source ${PRE_START}
@@ -215,7 +215,7 @@ function start_firewall {
 
 }
 
-# Stop _V4 and _V6 firewall
+# Stop V4 and V6 firewall
 function stop_firewall {
 
 	[ -f ${PRE_STOP} ] && source ${PRE_STOP}
@@ -227,7 +227,7 @@ function stop_firewall {
 
 }
 
-# Save _V4 and _V6 firewall
+# Save V4 and V6 firewall
 function save_firewall {
 
 	if [ ! -f ${APPLY_LOG} ] ; then
@@ -253,6 +253,32 @@ function save_firewall {
 	[ -f ${POST_SAVE} ] && source ${POST_SAVE}
 
 }
+
+# Update V4 and V6 firewall
+function update_firewall {
+
+compile_rules
+if [ $? -ne 0 ] ; then
+	rval=1
+	return
+fi
+
+apply_rules
+if [ $? -ne 0 ] ; then
+	rval=1
+	return
+fi
+
+save_firewall
+if [ $? -ne 0 ] ; then
+	rval=1
+	return
+fi
+
+}
+
+########################################################################
+# Functions (rules management)
 
 # Target type (IPv4, IPv6 or name/FQDN) ?
 function target_type {

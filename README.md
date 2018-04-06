@@ -34,3 +34,4 @@ sh install.sh
 * Save rules (they will be applied at boot time): `firewall save`
 * Start firewall: `firewall start` or `service firewall start`
 * Stop firewall (flush rules and set policy to *accept*): `firewall stop` or `service firewall stop`
+* You have done some minor changes on your rules, or you whish to update them (FQDN resolution): just do `firewall update`
