@@ -460,6 +460,7 @@ function parse_rule {
 
 	if [ "${p}" = "noip" ] ; then
 		echo "# ERROR: please check source or destination"
+		return 1
 	fi
 
 	echo
@@ -531,5 +532,44 @@ function apply_rules {
 	e=$(grep -c "^# ERROR: " ${APPLY_LOG})
 	echo -e "# ERRORS: ${e}\n"
 	[ ${e} -eq 0 ] || rval=1
+
+}
+
+########################################################################
+# Wrappers for pre/post scripts
+
+function ipt {
+
+	local R r
+	local R=$(parse_rule ipt ${@})
+	if [ $? -eq 0 ] ; then
+		echo "${R}" |grep -v "^#" |while read r ; do
+			${r}
+		done
+	fi
+
+}
+
+function ipt4 {
+
+	local R r
+	local R=$(parse_rule ipt4 ${@})
+	if [ $? -eq 0 ] ; then
+		echo "${R}" |grep -v "^#" |while read r ; do
+			${r}
+		done
+	fi
+
+}
+
+function ipt6 {
+
+	local R r
+	local R=$(parse_rule ipt6 ${@})
+	if [ $? -eq 0 ] ; then
+		echo "${R}" |grep -v "^#" |while read r ; do
+			${r}
+		done
+	fi
 
 }
