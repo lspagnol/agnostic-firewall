@@ -14,6 +14,8 @@ sh install.sh
 
 ## */etc/firewall/firewall.cf*
 * Main configuration file.
+* The rulesets filenames can be changed by editing the `RULES` variable.
+* IPv4 or IPv6 firewall can be disabled by uncomment `V4_DISABLE` or `V6_DISABLE`.
 
 ## */etc/firewall/Base.rules*
 * Basic common rules: loopback, established, routing and IPv6 neighbor, various ICMP, ...
