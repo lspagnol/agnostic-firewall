@@ -42,6 +42,9 @@ sh install.sh
   * *post-start.sh*, *post-start_V4.sh*, *post-start_V6.sh*
   * *pre-stop.sh*, *pre-stop_V4.sh*, *pre-stop_V6.sh*
   * *post-stop.sh*, *post-stop_V4.sh*, *post-stop_V6.sh*
+* You can use Bash syntax.
+* Global variables of main script are available.
+* It's recommended to use `ipt`, `ipt4` or `ipt6` instead of `iptables` or `ip6tables`.
 
 
 # Usage:
