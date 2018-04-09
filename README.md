@@ -34,6 +34,16 @@ sh install.sh
   * resolve V4/V6 addresses for host/fqdn based rule.
 * Declaration can be explicit: use `ipt4` or `ipt6` instead of `ipt`.
 
+## */etc/firewall/{pre|post}-{start|stop|save}*
+* Theses **hook** scripts, as defined in **/etc/firewall/firewall.cf** are included if available:
+  * *pre-save.sh*, *pre-save_V4.sh*, *pre-save_V6.sh*
+  * *post-save.sh*, *post-save_V4.sh*, *post-save_V6.sh*
+  * *pre-start.sh*, *pre-start_V4.sh*, *pre-start_V6.sh*
+  * *post-start.sh*, *post-start_V4.sh*, *post-start_V6.sh*
+  * *pre-stop.sh*, *pre-stop_V4.sh*, *pre-stop_V6.sh*
+  * *post-stop.sh*, *post-stop_V4.sh*, *post-stop_V6.sh*
+
+
 # Usage:
 
 ## Rules management:
