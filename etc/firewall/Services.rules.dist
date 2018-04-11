@@ -12,12 +12,17 @@ ipt -A OUTPUT -j Services-OUT
 
 
 ########################################################################
-## Services Chains
+## Services Chains (INPUT)
 ########################################################################
 
 # Both: allow access to your services here
 #ipt -A Services-IN -p tcp -m tcp --dport 80 -j ACCEPT
 #ipt -A Services-IN -p tcp -m tcp --dport 443 -j ACCEPT
+
+
+########################################################################
+## Services Chains (OUTPUT)
+########################################################################
 
 # Both: allow what is needed by your services here
 #ipt -A Services-OUT -p tcp -m tcp --dport 636 -d ldap.mydomain.tld -j ACCEPT
@@ -37,8 +42,18 @@ ipt -A OUTPUT -j Services-OUT
 #ipt -A OUTPUT -j DROP
 
 # Example 3:
-#ipt -N END
-#ipt -A END -m limit --limit 10/min -j LOG
+ipt -N END
+ipt -A INPUT -j END
+ipt -A OUTPUT -j END
+ipt -A FORWARD -j END
+
+# Drop but do not log Netbios and IPv4 multicast
+ipt -A END -p udp -m udp --dport 137 -j DROP
+ipt -A END -p udp -m udp --dport 138 -j DROP
+ipt -A END -d 224.0.0.1 -j DROP
+
+# Log
+ipt -A END -m limit --limit 10/min -j LOG
+
+# Check netfilter logs and counter before uncomment the last rule !!
 #ipt -A END -j DROP
-#ipt -A INPUT -j END
-#ipt -A OUTPUT -j END
