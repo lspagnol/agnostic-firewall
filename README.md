@@ -45,7 +45,29 @@ sh install.sh
 * You can use Bash syntax.
 * Global variables of main script are available.
 * It's recommended to use `ipt`, `ipt4` or `ipt6` instead of `iptables` or `ip6tables`.
-
+* Examples (use *Agnostic-Firewall* with *SimpleBan*):
+  * **post-start.sh**:
+````
+# SimpleBan
+if [ -x /usr/local/sbin/sban ] ; then
+	ipt -N BANNED
+	ipt -I INPUT -j BANNED
+	ipt -I OUTPUT -j BANNED
+	ipt -I FORWARD -j BANNED
+	/usr/local/sbin/sban start
+fi
+````
+  * **pre-stop.sh**:
+````
+# SimpleBan
+if [ -x /usr/local/sbin/sban ] ; then
+	/usr/local/sbin/sban stop
+fi
+````
+  * **post-save.sh** is just a symlink:
+````
+ln -s /etc/firewall/post-start.sh /etc/firewall/post-save.sh
+````
 
 # Usage:
 
