@@ -45,7 +45,7 @@ sh install.sh
 * You can use Bash syntax.
 * Global variables of main script are available.
 * It's recommended to use `ipt`, `ipt4` or `ipt6` instead of `iptables` or `ip6tables`.
-* Examples (use *Agnostic-Firewall* with *SimpleBan*):
+### Examples (use *Agnostic-Firewall* with *SimpleBan*):
   * **post-start.sh**:
 ````
 # SimpleBan
