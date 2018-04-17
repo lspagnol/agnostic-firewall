@@ -15,11 +15,23 @@ ipt -A OUTPUT -j Base-OUT
 ## Base chains
 ########################################################################
 
+# Warning about "conntrack"
+# "-m state --state RELATED,ESTABLISHED" is obsolete, please use
+# "-m conntrack --ctstate ESTABLISHED" instead
+# <= ipt -A Base-IN -m state --state RELATED,ESTABLISHED -j ACCEPT
+# => ipt -A Base-IN -m conntrack --ctstate ESTABLISHED -j ACCEPT
+# <= ipt -A Base-OUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+# => ipt -A Base-OUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
+# See:
+# https://github.com/rtsisyk/linux-iptables-contrack-exploit
+# http://home.regit.org/wp-content/uploads/2011/11/secure-conntrack-helpers.html
+# https://gist.github.com/azlux/6a70bd38bb7c525ab26efe7e3a7ea8ac
+
 # Both: allow loopback and established
 ipt -A Base-IN -i lo -j ACCEPT
-ipt -A Base-IN -m state --state RELATED,ESTABLISHED -j ACCEPT
+ipt -A Base-IN -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ipt -A Base-OUT -o lo -j ACCEPT
-ipt -A Base-OUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+ipt -A Base-OUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
 
 # Both: deny invalid frames
 ipt -N Badformat
